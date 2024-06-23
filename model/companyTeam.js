@@ -2,20 +2,16 @@ const mongoose = require("mongoose");
 
 const companyTeamSchema = new mongoose.Schema({
   name: {
-    type: String,
-    required: true,
+    type: String
   },
   position: {
-    type: String,
-    required: true,
+    type: String
   },
   bio: {
-    type: String,
-    required: true,
+    type: String
   },
   photoUrl: {
-    type: String,
-    required: false,
+    type: String
   },
   joinedAt: {
     type: Date,
