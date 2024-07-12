@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Service = require("./model/service");
 
-
 router.get("/getAllServices", async (req, res) => {
   try {
     const services = await Service.find();
@@ -11,7 +10,6 @@ router.get("/getAllServices", async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
-
 
 router.get("/getSingleService/:id", async (req, res) => {
   try {
@@ -25,10 +23,8 @@ router.get("/getSingleService/:id", async (req, res) => {
   }
 });
 
-
 router.post("/addServices", async (req, res) => {
   const service = new Service({
-    entityType: req.body.entityType,
     name: req.body.name,
     description: req.body.description,
     shortDescription: req.body.shortDescription,
@@ -43,15 +39,12 @@ router.post("/addServices", async (req, res) => {
   }
 });
 
-
 router.put("/updateService/:id", async (req, res) => {
   try {
     const service = await Service.findById(req.params.id);
     if (!service) {
       return res.status(404).json({ message: "Service not found" });
     }
-
-    service.entityType = req.body.entityType;
     service.name = req.body.name;
     service.description = req.body.description;
     service.shortDescription = req.body.shortDescription;
@@ -64,19 +57,18 @@ router.put("/updateService/:id", async (req, res) => {
   }
 });
 
-
-router.delete('/deleteService/:id', async (req, res) => {
-    try {
-      const service = await Service.findById(req.params.id);
-      if (!service) {
-        return res.status(404).json({ message: 'Service not found' });
-      }
-  
-      await Service.deleteOne({ _id: req.params.id });
-      res.json({ message: 'Service deleted' });
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+router.delete("/deleteService/:id", async (req, res) => {
+  try {
+    const service = await Service.findById(req.params.id);
+    if (!service) {
+      return res.status(404).json({ message: "Service not found" });
     }
-  });
+
+    await Service.deleteOne({ _id: req.params.id });
+    res.json({ message: "Service deleted" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;

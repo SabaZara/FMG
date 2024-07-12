@@ -11,7 +11,7 @@ router.get("/getAllBlogs", async (req, res) => {
   }
 });
 
-router.get("/getSingleBlog:id", async (req, res) => {
+router.get("/getSingleBlog/:id", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
@@ -36,7 +36,7 @@ router.post("/addBlog", async (req, res) => {
   }
 });
 
-router.put("/updateBlog:id", async (req, res) => {
+router.put("/updateBlog/:id", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
@@ -58,7 +58,7 @@ router.put("/updateBlog:id", async (req, res) => {
   }
 });
 
-router.delete("/deleteBlog:id", async (req, res) => {
+router.delete("/deleteBlog/:id", async (req, res) => {
   try {
     const blog = await Blog.findById(req.params.id);
     if (!blog) return res.status(404).json({ message: "Blog not found" });
