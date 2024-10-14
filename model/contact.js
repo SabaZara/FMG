@@ -1,16 +1,16 @@
 const mongoose = require("mongoose");
 
-const blogSchema = new mongoose.Schema({
-  title: {
+const contactSchema = new mongoose.Schema({
+  name: {
     type: String,
   },
-  content: {
+  contactNumber: {
     type: String,
   },
-  author: {
+  email: {
     type: String,
   },
-  imageUrl: {
+  message: {
     type: String,
   },
   createdAt: {
@@ -19,6 +19,4 @@ const blogSchema = new mongoose.Schema({
   },
 });
 
-const Blog = mongoose.model("Blog", blogSchema);
-
-module.exports = Blog;
+module.exports = mongoose.model("contactSchema", contactSchema);

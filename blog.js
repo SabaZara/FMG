@@ -4,7 +4,7 @@ const Blog = require("./model/Blog");
 
 router.get("/getAllBlogs", async (req, res) => {
   try {
-    const blogs = await Blog.find();
+    const blogs = await Blog.find({}, 'title imageUrl'); // Only include title and imageUrl fields
     res.json(blogs);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -26,6 +26,7 @@ router.post("/addBlog", async (req, res) => {
     title: req.body.title,
     content: req.body.content,
     author: req.body.author,
+    imageUrl: req.body.imageUrl,
   });
 
   try {
@@ -49,6 +50,9 @@ router.put("/updateBlog/:id", async (req, res) => {
     }
     if (req.body.author != null) {
       blog.author = req.body.author;
+    }
+    if (req.body.imageUrl != null) {
+      blog.imageUrl = req.body.imageUrl;
     }
 
     const updatedBlog = await blog.save();

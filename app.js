@@ -10,7 +10,9 @@ const companyTeamJS = require("./companyTeam");
 const servicesJS = require("./services");
 const homeJS = require("./home");
 const aboutJS = require("./about");
+const projectJS = require("./project");
 const mongoose = require("mongoose");
+const contactJS = require('./contact')
 app.use(cors());
 app.use(body_parser.json());
 app.use(express.json());
@@ -19,6 +21,8 @@ app.use(companyTeamJS);
 app.use(servicesJS);
 app.use(homeJS);
 app.use(aboutJS);
+app.use(projectJS);
+app.use(contactJS)
 mongoose
   .connect(mongooseConnect)
   .then(() => {
