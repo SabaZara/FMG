@@ -15,11 +15,11 @@ const ProjectSchema = new mongoose.Schema({
       name: {
         type: String,
       },
-    },
-  ],
-  additionalImages: [
-    {
-      type: String,
+      additionalImages: [
+        {
+          type: String,
+        },
+      ],
     },
   ],
 });
