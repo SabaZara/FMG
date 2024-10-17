@@ -71,29 +71,56 @@ router.post("/addProject", async (req, res) => {
 
 router.put("/updateProject/:id", async (req, res) => {
   try {
-    const project = await Project.findOne({ "projects._id": req.params.id });
-    if (!project) {
-      return res.status(404).json({ message: "Project not found" });
+    // Find the main project document (since you have only one)
+    const mainProject = await Project.findOne();
+
+    if (!mainProject) {
+      return res
+        .status(404)
+        .json({ message: "Main project document not found" });
     }
 
-    const projectItem = project.projects.id(req.params.id);
-    if (req.body.imageUrl != null) {
-      projectItem.imageUrl = req.body.imageUrl;
-    }
-    if (req.body.name != null) {
-      projectItem.name = req.body.name;
-    }
-    if (req.body.description != null) {
-      projectItem.description = req.body.description;
-    }
-    if (req.body.additionalImages != null) {
-      projectItem.additionalImages = req.body.additionalImages;
+    // Always update main fields if they exist in the request body, regardless of the ID
+    if (req.body.mainImage != null) {
+      mainProject.mainImage = req.body.mainImage;
     }
 
-    const updatedProject = await project.save();
+    if (req.body.mainDescription != null) {
+      mainProject.mainDescription = req.body.mainDescription;
+    }
+
+    // Now, check if we are also trying to update a sub-project
+    if (req.params.id) {
+      const subProject = mainProject.projects.id(req.params.id);
+
+      // Only attempt to update the sub-project if a valid one is found
+      if (subProject) {
+        // Dynamically update only the fields provided for the sub-project
+        if (req.body.imageUrl != null) {
+          subProject.imageUrl = req.body.imageUrl;
+        }
+        if (req.body.name != null) {
+          subProject.name = req.body.name;
+        }
+        if (req.body.description != null) {
+          subProject.description = req.body.description;
+        }
+        if (req.body.additionalImages != null) {
+          subProject.additionalImages = req.body.additionalImages;
+        }
+      } else {
+        // If no valid sub-project was found, we can still proceed with main project updates
+        return res.status(404).json({
+          message: "Sub-project not found, but main project was updated",
+        });
+      }
+    }
+
+    // Save the updated main project (whether updating main fields or sub-projects)
+    const updatedProject = await mainProject.save();
     res.json(updatedProject);
   } catch (err) {
-    res.status(400).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 

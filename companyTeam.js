@@ -4,7 +4,13 @@ const CompanyTeam = require("./model/companyTeam");
 
 router.get("/getAllMembers", async (req, res) => {
   try {
-    const teamMembers = await CompanyTeam.find();
+    const teamMembers = await CompanyTeam.find(
+      {},
+      {
+        bio: 0,
+        position: 0,
+      }
+    );
     res.json(teamMembers);
   } catch (err) {
     res.status(500).json({ message: err.message });
