@@ -15,6 +15,9 @@ const ProjectSchema = new mongoose.Schema({
       name: {
         type: String,
       },
+      description: {
+        type: String,  
+      },
       additionalImages: [
         {
           type: String,
