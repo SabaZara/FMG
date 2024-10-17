@@ -24,6 +24,26 @@ router.get("/getContact/:id", async (req, res) => {
 });
 
 
+router.post("/addContact", async (req, res) => {
+  try {
+    const { name, contactNumber, email, message } = req.body; 
+
+    const newContact = new Contact({
+      name,
+      contactNumber,
+      email,
+      message,  
+    });
+
+    // Save the new contact to the database
+    const savedContact = await newContact.save();
+
+    res.status(201).json(savedContact);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 router.delete("/deleteContact/:id", async (req, res) => {
   try {
     const contact = await Contact.findById(req.params.id);

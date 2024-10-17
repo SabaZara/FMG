@@ -53,9 +53,9 @@ router.post("/addProject", async (req, res) => {
   };
 
   try {
-    let project = await Project.find() 
-    console.log(project[0])
-    project = project[0]
+    let project = await Project.find();
+    console.log(project[0]);
+    project = project[0];
     if (!project) {
       return res.status(404).json({ message: "Project document not found" });
     }
@@ -99,16 +99,20 @@ router.put("/updateProject/:id", async (req, res) => {
 
 router.delete("/deleteProject/:id", async (req, res) => {
   try {
+    // Find the document containing the projects array that has the specific project ID
     const project = await Project.findOne({ "projects._id": req.params.id });
+
     if (!project) {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    // Remove the specific project from the array
-    project.projects.id(req.params.id).remove();
+    // Pull the project with the specific ID from the array
+    project.projects.pull({ _id: req.params.id });
 
+    // Save the updated document after removing the project
     await project.save();
-    res.json({ message: "Project deleted" });
+
+    res.json({ message: "Project deleted successfully" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
