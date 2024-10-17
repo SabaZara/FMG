@@ -2,37 +2,33 @@ const express = require("express");
 const router = express.Router();
 const Project = require("./model/projects");
 
-
 router.get("/getProjects", async (req, res) => {
   try {
-    const projects = await Project.find({}, '-additionalImages'); // Exclude the additionalImages field
-    res.json(projects);
+    const projects = await Project.find({}, "-additionalImages"); // Exclude the additionalImages field
+    res.json(projects[0]);
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
 });
 
-
 router.get("/getProject/:id", async (req, res) => {
-    try {
-      const project = await Project.findById(req.params.id);
-      if (!project) {
-        return res.status(404).json({ message: "Project not found" });
-      }
-       
-      const response = {
-        mainImage: project.mainImage,
-        mainDescription: project.mainDescription,
-        additionalImages: project.additionalImages,  
-      };
-  
-      res.json(response);
-    } catch (err) {
-      res.status(500).json({ message: err.message });
+  try {
+    const project = await Project.findById(req.params.id);
+    if (!project) {
+      return res.status(404).json({ message: "Project not found" });
     }
-  });
-  
 
+    const response = {
+      mainImage: project.mainImage,
+      mainDescription: project.mainDescription,
+      additionalImages: project.additionalImages,
+    };
+
+    res.json(response);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 router.post("/addProject", async (req, res) => {
   const { mainImage, mainDescription, projects, additionalImages } = req.body;
@@ -52,7 +48,6 @@ router.post("/addProject", async (req, res) => {
   }
 });
 
-
 router.put("/updateProject/:id", async (req, res) => {
   try {
     const project = await Project.findById(req.params.id);
@@ -60,7 +55,6 @@ router.put("/updateProject/:id", async (req, res) => {
       return res.status(404).json({ message: "Project not found" });
     }
 
-    
     if (req.body.mainImage != null) {
       project.mainImage = req.body.mainImage;
     }
@@ -80,7 +74,6 @@ router.put("/updateProject/:id", async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 });
-
 
 router.delete("/deleteProject/:id", async (req, res) => {
   try {
